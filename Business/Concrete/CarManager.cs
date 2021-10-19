@@ -1,8 +1,10 @@
 ﻿using Business.Abstract;
 using DataAccess.Abstract;
+using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Business.Concrete
@@ -14,6 +16,7 @@ namespace Business.Concrete
         {
             _carDal = carDal;
         }
+        
         public void Add(Car car)
         {
             _carDal.Add(car);
@@ -32,6 +35,16 @@ namespace Business.Concrete
         public Car GetById(int id)
         {
             return _carDal.GetById(id);
+        }
+
+        public List<Car> GetCarsByBrandId(int id)
+        {
+            return _carDal.GetAll(c => c.BrandId == id).ToList();
+        }
+
+        public List<Car> GetCarsByColorId(int id)
+        {
+            return _carDal.GetAll(c => c.ColorId == id).ToList();
         }
 
         public void Update(Car car)

@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Entities.Abstract
+namespace Business.Abstract
 {
-    public interface IBrand
+    public interface IColorService
     {
+
     }
 }
