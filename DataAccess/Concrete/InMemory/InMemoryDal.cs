@@ -48,6 +48,11 @@ namespace DataAccess.Concrete.InMemory
             return cars.SingleOrDefault(c => c.Id == id);
         }
 
+        public Car GetById(Expression<Func<Car, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Update(Car car)
         {
             Car carToUpdate = cars.SingleOrDefault(c => c.Id == car.Id);
