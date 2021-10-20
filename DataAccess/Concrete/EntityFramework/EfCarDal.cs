@@ -2,6 +2,7 @@
 using Core.DataAccess.EntityFramework;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,25 @@ namespace DataAccess.Concrete.EntityFramework
                 Console.WriteLine("Sisteme araç ekleme başarısız. İstenen kriterlere uymuyor.");
             }
 
+        }
+
+        public List<CarDetailDto> GetCarDetail()
+        {
+            using (DatabaseContext context = new DatabaseContext())
+            {
+                var result = from car in context.Cars
+                             join brand in context.Brands on car.BrandId equals brand.Id
+                             join color in context.Colors on car.ColorId equals color.Id
+                             select new CarDetailDto
+                             {
+                                 CarId = car.Id,
+                                 BrandName = brand.Name,
+                                 CarDescription = car.Description,
+                                 ColorName = color.Name,
+                                 DailyPrice = car.DailyPrice
+                             };
+                return result.ToList();
+            }
         }
     }
 }
