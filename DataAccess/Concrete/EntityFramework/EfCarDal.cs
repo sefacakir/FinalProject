@@ -14,19 +14,6 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EfCarDal : EfEntityRepositoryBase<Car,DatabaseContext>, ICarDal
     {
-        public void Add(Car car)
-        {
-            if (car.Description.Length > 1 && car.DailyPrice > 0)
-            {
-                base.Add(car);
-            }
-            else
-            {
-                Console.WriteLine("Sisteme araç ekleme başarısız. İstenen kriterlere uymuyor.");
-            }
-
-        }
-
         public List<CarDetailDto> GetCarDetail()
         {
             using (DatabaseContext context = new DatabaseContext())
