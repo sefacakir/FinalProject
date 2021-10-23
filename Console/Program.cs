@@ -10,11 +10,32 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
+            CarManager carManager = new CarManager(new EfCarDal());
+            CustomerManager customerManager = new CustomerManager(new EfCustomerDal());
+            RentalManager rentalManager = new RentalManager(new EfRentalDal());
+
+            Rental rental1 = new Rental()
+            {
+                //Id = 2,
+                CarId = 2,
+                CustomerId = 5,
+                RentDate = DateTime.Now, //şimdi kiralamak istiyorum.
+                ReturnDate = new DateTime(2021,10,24,0,0,0) //şu tarihte bırakacağım.
+            };
+
+            Console.WriteLine(rentalManager.Add(rental1).Message);
+
+
+
+
+
+
+
             //GetAll(carManager);
             //GetById(carManager);
             //CrudOperations(carManager);
 
-            CarManager carManager = new CarManager(new EfCarDal());
+            /*CarManager carManager = new CarManager(new EfCarDal());
             var result = carManager.GetAll();
             if (result.Success)
             {
@@ -26,14 +47,7 @@ namespace ConsoleUI
             else
             {
                 Console.WriteLine(result.Message);
-            }
-
-
-
-            
-
-            
-
+            }*/
 
             //BrandManager brandManager = new BrandManager(new EfBrandDal());
             //GetAll(brandManager);
