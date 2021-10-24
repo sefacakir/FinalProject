@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constants;
 using Core.Utilities.Result;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
@@ -23,46 +24,71 @@ namespace Business.Concrete
         {
             if (car.Description.Length < 2 || car.DailyPrice < 1)
             {
-                return new ErrorResult();
+                return new ErrorResult(Messages.ErrorLengthPrice);
             }
             else
             {
                 _carDal.Add(car);
-                return new SuccessResult();
+                return new SuccessResult(Messages.SuccessAdd);
             }
 
         }
 
         public IResult Update(Car car)
         {
-            _carDal.Update(car);
-            return new SuccessResult();
+            var result = _carDal.GetAll(c => c.Id == car.Id).SingleOrDefault();
+            if (result != null)
+            {
+                _carDal.Update(car);
+                return new SuccessResult(Messages.SuccessUpdate);
+            }
+            else
+            {
+                return new ErrorResult(Messages.kayitBulunamadi);
+            }
         }
 
         public IResult Delete(Car car)
         {
-            _carDal.Delete(car);
-            return new SuccessResult();
+            var result = _carDal.GetAll(c => c.Id == car.Id).SingleOrDefault();
+            if (result != null)
+            {
+                _carDal.Delete(car);
+                return new SuccessResult(Messages.SuccessDelete);
+            }
+            else
+            {
+                return new ErrorResult(Messages.kayitBulunamadi);
+            }
         }
 
         public IDataResult<List<Car>> GetAll()
         {
-            if(DateTime.Now.Hour == 0)
+            if (DateTime.Now.Hour == 0)
             {
-                return new ErrorDataResult<List<Car>>("Sistem bakımda.");
+                return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
             }
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(),"Ürünler veritabanından çekildi.");
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.Success);
         }
 
         public IDataResult<Car> GetById(int id)
         {
-            return new SuccessDataResult<Car>(_carDal.GetAll(c => c.Id == id).FirstOrDefault());
+            var result = _carDal.GetAll(c => c.Id == id).SingleOrDefault();
+            if (result != null)
+            {
+                return new SuccessDataResult<Car>(_carDal.GetAll(c => c.Id == id).FirstOrDefault(), Messages.Success);
+            }
+            else
+            {
+                return new ErrorDataResult<Car>(Messages.kayitBulunamadi);
+            }
+
         }
 
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
             var result = _carDal.GetCarDetail();
-            return new ErrorDataResult<List<CarDetailDto>>(result);
+            return new SuccessDataResult<List<CarDetailDto>>(result);
         }
 
         public IDataResult<List<Car>> GetCarsByBrandId(int id)
@@ -72,15 +98,23 @@ namespace Business.Concrete
 
         public IDataResult<List<Car>> GetCarsByColorId(int id)
         {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == id).ToList());
+            var result = _carDal.GetAll(c => c.ColorId == id).ToList();
+            if (result.Count !=0)
+            {
+                return new SuccessDataResult<List<Car>>(result);
+            }
+            else
+            {
+                return new ErrorDataResult<List<Car>>(Messages.kayitBulunamadi);
+            }
         }
 
         public IDataResult<Car> Get(Car car)
         {
             var result = _carDal.GetAll(c => c.Id == car.Id).SingleOrDefault();
-            if (result!=null)
+            if (result != null)
             {
-            return new SuccessDataResult<Car>(_carDal.GetAll(c => c.Id == car.Id).FirstOrDefault());
+                return new SuccessDataResult<Car>(_carDal.GetAll(c => c.Id == car.Id).FirstOrDefault());
             }
             else
             {
