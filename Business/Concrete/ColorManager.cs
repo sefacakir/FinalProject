@@ -18,31 +18,62 @@ namespace Business.Concrete
         }
         public IResult Add(Color color)
         {
-            _colorDal.Add(color);
-            return new SuccessResult();
+            var result = _colorDal.GetAll(c => c.Name == color.Name);
+            if (result == null)
+            {
+                _colorDal.Add(color);
+                return new SuccessResult();
+            }
+            else
+            {
+                return new ErrorResult();
+            }
         }
 
         public IResult Delete(Color color)
         {
-            _colorDal.Delete(color);
-            return new SuccessResult();
+            var result = _colorDal.GetAll(c => c.Name == color.Name).SingleOrDefault();
+            if (result==null)
+            {
+                _colorDal.Delete(color);
+                return new SuccessResult();
+            }
+            else
+            {
+                return new ErrorResult();
+            }
         }
 
         public IDataResult<List<Color>> GetAll()
         {
             return new SuccessDataResult<List<Color>>(_colorDal.GetAll());
-
         }
 
         public IDataResult<Color> GetById(int id)
         {
-            return new SuccessDataResult<Color>(_colorDal.GetAll(c => c.Id == id).SingleOrDefault());
+            var result = _colorDal.GetAll(c=> c.Id == id).SingleOrDefault();
+            if(result != null)
+            {
+                return new SuccessDataResult<Color>(result);
+            }
+            else
+            {
+                return new ErrorDataResult<Color>(result);
+            }
         }
 
         public IResult Update(Color color)
         {
-            _colorDal.Update(color);
-            return new SuccessResult();
+            var result = _colorDal.GetAll(c => c.Id == color.Id).SingleOrDefault();
+            if (result != null)
+            {
+                _colorDal.Update(color);
+                return new SuccessResult();
+            }
+            else
+            {
+                return new ErrorResult();
+            }
         }
     }
 }

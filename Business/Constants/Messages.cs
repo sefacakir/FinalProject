@@ -15,6 +15,7 @@ namespace Business.Constants
         public static string SuccessUpdate = "Veri güncelleme işlemi başarılı.";
         public static string MaintenanceTime = "Sistem bakımdadır.";
         public static string Success = "İşlem başarılı.";
+        public static string Error = "İşlem başarısız.";
 
     }
 }

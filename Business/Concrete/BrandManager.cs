@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constants;
 using Core.Utilities.Result;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -16,34 +17,75 @@ namespace Business.Concrete
         {
             _brandDal = brandDal;
         }
+
+        public IDataResult<Brand> GetById(int id)
+        {
+            var result = _brandDal.GetAll(c => c.Id == id).FirstOrDefault();
+            if (result != null)
+            {
+                return new SuccessDataResult<Brand>(result, Messages.Success);
+            }
+            else
+            {
+                return new ErrorDataResult<Brand>(result, Messages.kayitBulunamadi);
+            }
+        }
+
         public IResult Add(Brand brand)
         {
-            _brandDal.Add(brand);
-            return new SuccessResult();
+            var result = _brandDal.GetAll(c => c.Name == brand.Name).SingleOrDefault();
+            if (result == null)
+            {
+                _brandDal.Add(brand);
+                return new SuccessResult(Messages.Success);
+            }
+            else
+            {
+                return new ErrorResult(Messages.Error);
+            }
         }
 
         public IResult Delete(Brand brand)
         {
-            _brandDal.Delete(brand);
-            return new SuccessResult();
+            var result = _brandDal.GetAll(c => c.Id == brand.Id);
+            if (result != null)
+            {
+                _brandDal.Delete(brand);
+                return new SuccessResult(Messages.Success);
+            }
+            else
+            {
+                return new ErrorResult(Messages.Error);
+            }
 
         }
 
         public IDataResult<List<Brand>> GetAll()
         {
-            return new SuccessDataResult<List<Brand>>(_brandDal.GetAll());
-        }
-
-        public IDataResult<Brand> GetById(int id)
-        {
-            return new SuccessDataResult<Brand>( _brandDal.GetAll(c => c.Id == id).FirstOrDefault());
-            //return _brandDal.GetAll(c=> c.Id == id);
+            var result = _brandDal.GetAll();
+            if (result.Count != 0)
+            {
+                return new SuccessDataResult<List<Brand>>(result, Messages.Success);
+            }
+            else
+            {
+                return new ErrorDataResult<List<Brand>>(Messages.Error);
+            }
         }
 
         public IResult Update(Brand brand)
         {
-            _brandDal.Update(brand);
-            return new SuccessResult();
+            var result = _brandDal.GetAll(c => c.Id == brand.Id).SingleOrDefault();
+            if (result != null)
+            {
+                _brandDal.Update(brand);
+                return new SuccessResult(Messages.Success);
+
+            }
+            else
+            {
+                return new ErrorResult(Messages.Error);
+            }
         }
     }
 }
