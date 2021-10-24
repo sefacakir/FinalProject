@@ -16,14 +16,19 @@ namespace ConsoleUI
 
             Rental rental1 = new Rental()
             {
-                //Id = 2,
-                CarId = 2,
-                CustomerId = 5,
-                RentDate = DateTime.Now, //şimdi kiralamak istiyorum.
-                ReturnDate = new DateTime(2021,10,24,0,0,0) //şu tarihte bırakacağım.
+                Id = 9,
+                CarId = 1,
+                CustomerId = 4,
+                RentDate = new DateTime(2021,10,23,19,54,05,043),
+                ReturnDate = new DateTime(2021, 10, 24, 12, 0, 0)
             };
+            Console.WriteLine(rentalManager.Update(rental1).Message);
 
-            Console.WriteLine(rentalManager.Add(rental1).Message);
+
+            /*foreach (var item in rentalManager.GetAll().Data)
+            {
+                Console.WriteLine(item.Id+" " + item.CarId+" "+item.CustomerId+" "+item.RentDate+" " + item.ReturnDate);    
+            }*/
 
 
 
@@ -83,7 +88,7 @@ namespace ConsoleUI
             //Console.WriteLine("\nEkleme işleminden sonra\n");
             //carManager.Add(car);
             //Console.WriteLine("\n Ekleme Başarılı. \n");
-            
+
             GetAll(carManager);
             car.Id = 1002;
             carManager.Update(car);
@@ -155,9 +160,9 @@ namespace ConsoleUI
         }
         private static void GetAll(CarManager carManager)
         {
-           foreach (var car in carManager.GetAll().Data)
+            foreach (var car in carManager.GetAll().Data)
             {
-                Console.WriteLine(car.Id+"  " +car.Description);
+                Console.WriteLine(car.Id + "  " + car.Description);
             }
         }
     }

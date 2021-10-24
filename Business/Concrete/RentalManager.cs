@@ -23,6 +23,12 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
+        public IResult Delete(int id)
+        {
+            _rentalDal.Delete(_rentalDal.GetAll(c=> c.Id == id).SingleOrDefault());
+            return new SuccessResult();
+        }
+
         public IDataResult<List<Rental>> GetAll()
         {
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll());
@@ -31,7 +37,7 @@ namespace Business.Concrete
         public IResult Add(Rental rental)
         {
             var rentalDate = _rentalDal.GetAll(r => r.CarId == rental.CarId).LastOrDefault();
-            if (rentalDate.ReturnDate == null || rentalDate.ReturnDate < rental.RentDate)
+            if (rentalDate==null || (rentalDate.ReturnDate == null || rentalDate.ReturnDate < rental.RentDate))
             {
                 _rentalDal.Add(rental);
                 return new SuccessResult("Kiralama hizmeti ayarlandı.");
@@ -44,8 +50,16 @@ namespace Business.Concrete
 
         public IResult Update(Rental rental)
         {
-            _rentalDal.Update(rental);
-            return new SuccessResult();
+            var control = _rentalDal.GetAll(c=> c.CarId == rental.CarId || c.CustomerId == rental.CustomerId);
+            if (control != null)
+            {
+                _rentalDal.Update(rental);
+                return new SuccessResult("Güncelleme başarılı.");
+            }
+            else
+            {
+                return new ErrorResult("Kayıt bulunamadı. Verileri kontrol ediniz.");
+            }
         }
     }
 }

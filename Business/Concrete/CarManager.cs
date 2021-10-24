@@ -61,8 +61,8 @@ namespace Business.Concrete
 
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
-            var result = _carDal.GetCarDetail(); //bu kısım datamızı dutuyor.
-            return new ErrorDataResult<List<CarDetailDto>>(result,"ürün ekleme başarılı.");//bu kısımda ise, data, mesaj ve success
+            var result = _carDal.GetCarDetail();
+            return new ErrorDataResult<List<CarDetailDto>>(result);
         }
 
         public IDataResult<List<Car>> GetCarsByBrandId(int id)
@@ -73,6 +73,19 @@ namespace Business.Concrete
         public IDataResult<List<Car>> GetCarsByColorId(int id)
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == id).ToList());
+        }
+
+        public IDataResult<Car> Get(Car car)
+        {
+            var result = _carDal.GetAll(c => c.Id == car.Id).SingleOrDefault();
+            if (result!=null)
+            {
+            return new SuccessDataResult<Car>(_carDal.GetAll(c => c.Id == car.Id).FirstOrDefault());
+            }
+            else
+            {
+                return new ErrorDataResult<Car>("Kayıt bulunamadı.");
+            }
         }
     }
 }
