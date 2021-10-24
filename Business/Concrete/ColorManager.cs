@@ -32,8 +32,8 @@ namespace Business.Concrete
 
         public IResult Delete(Color color)
         {
-            var result = _colorDal.GetAll(c => c.Name == color.Name).SingleOrDefault();
-            if (result==null)
+            var result = _colorDal.GetAll(c => c.Id == color.Id).SingleOrDefault();
+            if (result != null)
             {
                 _colorDal.Delete(color);
                 return new SuccessResult();

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using Business.Constants;
 
 namespace Business.Concrete
 {
@@ -19,14 +20,30 @@ namespace Business.Concrete
 
         public IResult Delete(Rental rental)
         {
-            _rentalDal.Delete(rental);
-            return new SuccessResult();
+            var result = _rentalDal.GetAll(c => c.Id == rental.Id).SingleOrDefault();
+            if (result != null)
+            {
+                _rentalDal.Delete(rental);
+                return new SuccessResult();
+            }
+            else
+            {
+                return new ErrorResult();
+            }
         }
 
         public IResult Delete(int id)
         {
-            _rentalDal.Delete(_rentalDal.GetAll(c=> c.Id == id).SingleOrDefault());
-            return new SuccessResult();
+            var result = _rentalDal.GetAll(c => c.Id == id).SingleOrDefault();
+            if (result != null)
+            {
+                _rentalDal.Delete(result);
+                return new SuccessResult();
+            }
+            else
+            {
+                return new ErrorResult();
+            }
         }
 
         public IDataResult<List<Rental>> GetAll()
@@ -50,15 +67,15 @@ namespace Business.Concrete
 
         public IResult Update(Rental rental)
         {
-            var control = _rentalDal.GetAll(c=> c.CarId == rental.CarId || c.CustomerId == rental.CustomerId);
-            if (control != null)
+            var result = _rentalDal.GetAll(c=> c.CarId == rental.CarId || c.CustomerId == rental.CustomerId);
+            if (result != null)
             {
                 _rentalDal.Update(rental);
-                return new SuccessResult("Güncelleme başarılı.");
+                return new SuccessResult(Messages.Success);
             }
             else
             {
-                return new ErrorResult("Kayıt bulunamadı. Verileri kontrol ediniz.");
+                return new ErrorResult(Messages.Error);
             }
         }
     }

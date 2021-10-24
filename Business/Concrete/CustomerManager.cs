@@ -18,14 +18,29 @@ namespace Business.Concrete
         }
         public IResult Add(Customer customer)
         {
-            _customerDal.Add(customer);
-            return new SuccessResult();
+            if (customer.CompanyName.Length>0)
+            {
+                _customerDal.Add(customer);
+                return new SuccessResult();
+            }
+            else
+            {
+                return new ErrorResult();
+            }
         }
 
         public IResult Delete(Customer customer)
         {
-            _customerDal.Delete(customer);
-            return new SuccessResult();
+            var result = _customerDal.GetAll(c => c.Id == customer.Id).FirstOrDefault();
+            if (result != null)
+            {
+                _customerDal.Delete(customer);
+                return new SuccessResult();
+            }
+            else
+            {
+                return new ErrorResult();
+            }
         }
 
         public IDataResult<List<Customer>> GetAll()
@@ -35,13 +50,29 @@ namespace Business.Concrete
 
         public IDataResult<Customer> GetById(int id)
         {
-            return new SuccessDataResult<Customer>(_customerDal.GetAll(c => c.UserId == id).FirstOrDefault());
+            var result = _customerDal.GetAll(c => c.Id == id).SingleOrDefault();
+            if (result != null)
+            {
+                return new SuccessDataResult<Customer>(result);
+            }
+            else
+            {
+                return new ErrorDataResult<Customer>(result);
+            }
         }
 
         public IResult Update(Customer customer)
         {
-            _customerDal.Update(customer);
-            return new SuccessResult();
+            var result = _customerDal.GetAll(c => c.Id == customer.Id).SingleOrDefault();
+            if (result != null)
+            {
+                _customerDal.Update(customer);
+                return new SuccessResult();
+            }
+            else
+            {
+                return new ErrorResult();
+            }
         }
     }
 }
