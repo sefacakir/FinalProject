@@ -31,7 +31,7 @@ namespace WebAPI
         {
             services.AddControllers();
 
-            services.AddSingleton<ICarService,CarManager>();
+            /*services.AddSingleton<ICarService,CarManager>();
             services.AddSingleton<ICarDal, EfCarDal>();
 
             services.AddSingleton<IBrandService, BrandManager>();
@@ -47,7 +47,7 @@ namespace WebAPI
             services.AddSingleton<IRentalDal, EfRentalDal>();
 
             services.AddSingleton<ICustomerService, CustomerManager>();
-            services.AddSingleton<ICustomerDal, EfCustomerDal>();
+            services.AddSingleton<ICustomerDal, EfCustomerDal>();*/
 
         }
 
