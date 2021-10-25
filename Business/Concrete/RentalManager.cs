@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using Business.Constants;
+using Core.Aspects.Autofac.Validation;
+using Business.ValidationRules.FluentValidation;
 
 namespace Business.Concrete
 {
@@ -32,25 +34,13 @@ namespace Business.Concrete
             }
         }
 
-        public IResult Delete(int id)
-        {
-            var result = _rentalDal.GetAll(c => c.Id == id).SingleOrDefault();
-            if (result != null)
-            {
-                _rentalDal.Delete(result);
-                return new SuccessResult();
-            }
-            else
-            {
-                return new ErrorResult();
-            }
-        }
 
         public IDataResult<List<Rental>> GetAll()
         {
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll());
         }
 
+        [ValidationAspect(typeof(RentalValidator))]
         public IResult Add(Rental rental)
         {
             var rentalDate = _rentalDal.GetAll(r => r.CarId == rental.CarId).LastOrDefault();

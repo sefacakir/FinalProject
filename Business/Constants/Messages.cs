@@ -16,6 +16,10 @@ namespace Business.Constants
         public static string MaintenanceTime = "Sistem bakımdadır.";
         public static string Success = "İşlem başarılı.";
         public static string Error = "İşlem başarısız.";
+        public static string NotEmpty = "Bu kısım boş bırakılamaz.";
+        public static string MinLength = "Minimum 2 karakter girilmelidir.";
+        public static string GreaterThan = "Sıfırdan (0) daha büyük bir değer girilmelidir.";
+        public static string Empty = "Id alanı veritabanı tarafından otomatik atanmaktadır. Lütfen boş bırakınız.";
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using Entities.Concrete;
+﻿using Business.Constants;
+using Entities.Concrete;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -10,10 +11,10 @@ namespace Business.ValidationRules.FluentValidation
     {
         public CarValidator()
         {
-            RuleFor(c => c.Description).NotEmpty();
-            RuleFor(c => c.Description).MinimumLength(2);
-            RuleFor(c => c.DailyPrice).NotEmpty();
-            RuleFor(c => c.DailyPrice).GreaterThan(0);
+            RuleFor(c => c.Description).NotEmpty().WithMessage(Messages.NotEmpty);
+            RuleFor(c => c.Description).MinimumLength(2).WithMessage(Messages.MinLength);
+            RuleFor(c => c.DailyPrice).NotEmpty().WithMessage(Messages.NotEmpty);
+            RuleFor(c => c.DailyPrice).GreaterThan(0).WithMessage(Messages.GreaterThan);
             //RuleFor(c => c.Description).Must(StartWithUppercase).WithMessage("Açıklama kısmı büyük harf ile yazılmalıdır.");
         }
 
