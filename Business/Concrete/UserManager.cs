@@ -8,6 +8,7 @@ using System.Text;
 using System.Linq;
 using Core.Aspects.Autofac.Validation;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation.FluentValidation;
 
 namespace Business.Concrete
 {

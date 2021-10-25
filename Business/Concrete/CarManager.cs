@@ -2,6 +2,7 @@
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
+using Core.Aspects.Autofac.Validation.FluentValidation;
 using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Result;
 using DataAccess.Abstract;
@@ -31,6 +32,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.SuccessAdd);
         }
 
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Update(Car car)
         {
             var result = _carDal.GetAll(c => c.Id == car.Id).SingleOrDefault();
