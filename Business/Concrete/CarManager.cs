@@ -4,6 +4,7 @@ using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
 using Core.Aspects.Autofac.Validation.FluentValidation;
 using Core.CrossCuttingConcerns.Validation;
+using Core.Utilities.Business;
 using Core.Utilities.Result;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
@@ -19,8 +20,10 @@ namespace Business.Concrete
     public class CarManager : ICarService
     {
         ICarDal _carDal;
-        public CarManager(ICarDal carDal)
+        IBrandService _brandService;
+        public CarManager(ICarDal carDal, IBrandService brandService)
         {
+            _brandService = brandService;
             _carDal = carDal;
         }
 
@@ -28,6 +31,16 @@ namespace Business.Concrete
         [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
+            var result = BusinessRules.Run(
+                CheckIfCarCountOfBrandCorrect(car.BrandId),
+                CheckIfCarDescriptionExists(car.Description),
+                CheckIfCategoryLimitExceded()
+            );
+            if (result != null)
+            {
+                return result;
+            }
+
             _carDal.Add(car);
             return new SuccessResult(Messages.SuccessAdd);
         }
@@ -119,6 +132,36 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<Car>("Kayıt bulunamadı.");
             }
+        }
+
+        private IResult CheckIfCarCountOfBrandCorrect(int brandId)
+        {
+            var result = _carDal.GetAll(c => c.BrandId == brandId).Count;
+            if (result <= 10)
+            {
+                return new SuccessResult();
+            }
+            return new ErrorResult(Messages.CarCountOfBrandError);
+        }
+
+        private IResult CheckIfCarDescriptionExists(string description)
+        {
+            var result = _carDal.GetAll(c => c.Description == description).Any();
+            if (result)
+            {
+                return new ErrorResult(Messages.ControlOfName);
+            }
+            return new SuccessResult();
+        }
+
+        private IResult CheckIfCategoryLimitExceded()
+        {
+            var result = _brandService.GetAll();
+            if (result.Data.Count > 12)
+            {
+                return new ErrorResult(Messages.CategoryLimitExceded);
+            }
+            return new SuccessResult();
         }
     }
 }

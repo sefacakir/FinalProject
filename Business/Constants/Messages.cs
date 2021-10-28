@@ -20,6 +20,8 @@ namespace Business.Constants
         public static string MinLength = "Minimum 2 karakter girilmelidir.";
         public static string GreaterThan = "Sıfırdan (0) daha büyük bir değer girilmelidir.";
         public static string Empty = "Id alanı veritabanı tarafından otomatik atanmaktadır. Lütfen boş bırakınız.";
-
+        public static string CarCountOfBrandError = "Bir markada en fazla 10 araç olabilir.";
+        public static string ControlOfName = "Aynı açıklamaya sahip bir araç eklenemez.";
+        public static string CategoryLimitExceded = "Kategori sınırı aşıldığı için sisteme yeni ürün eklenemez.";
     }
 }
