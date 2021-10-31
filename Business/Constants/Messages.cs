@@ -8,7 +8,7 @@ namespace Business.Constants
     {
         //isimlendirmeler düzeltilecek.
         public static string SuccessAdd = "Veri ekleme işlemi başarılı.";
-        public static string kayitBulunamadi = "Kayıt bulunamadı.";
+        public static string NotFound = "Kayıt bulunamadı.";
         public static string ErrorAdd = "Veri ekleme işlemi başarısız.";
         public static string SuccessDelete = "Veri silme işlemi başarılı.";
         public static string ErrorLengthPrice = "Veri açıklamasının en az 2 karakter ve günlük kira ücretinin 0'dan büyük olması gerekmektedir.";

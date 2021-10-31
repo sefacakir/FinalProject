@@ -30,7 +30,7 @@ namespace Business.Concrete
             }
             else
             {
-                return new ErrorDataResult<Brand>(result, Messages.kayitBulunamadi);
+                return new ErrorDataResult<Brand>(result, Messages.NotFound);
             }
         }
 

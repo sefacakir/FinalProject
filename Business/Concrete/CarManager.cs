@@ -56,7 +56,7 @@ namespace Business.Concrete
             }
             else
             {
-                return new ErrorResult(Messages.kayitBulunamadi);
+                return new ErrorResult(Messages.NotFound);
             }
         }
 
@@ -70,7 +70,7 @@ namespace Business.Concrete
             }
             else
             {
-                return new ErrorResult(Messages.kayitBulunamadi);
+                return new ErrorResult(Messages.NotFound);
             }
         }
 
@@ -88,11 +88,11 @@ namespace Business.Concrete
             var result = _carDal.GetAll(c => c.Id == id).SingleOrDefault();
             if (result != null)
             {
-                return new SuccessDataResult<Car>(_carDal.GetAll(c => c.Id == id).FirstOrDefault(), Messages.Success);
+                return new SuccessDataResult<Car>(result, Messages.Success);
             }
             else
             {
-                return new ErrorDataResult<Car>(Messages.kayitBulunamadi);
+                return new ErrorDataResult<Car>(Messages.NotFound);
             }
 
         }
@@ -117,7 +117,7 @@ namespace Business.Concrete
             }
             else
             {
-                return new ErrorDataResult<List<Car>>(Messages.kayitBulunamadi);
+                return new ErrorDataResult<List<Car>>(Messages.NotFound);
             }
         }
 
