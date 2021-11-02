@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Entities.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -24,5 +25,10 @@ namespace Business.Constants
         public static string ControlOfName = "Aynı açıklamaya sahip bir araç eklenemez.";
         public static string CategoryLimitExceded = "Kategori sınırı aşıldığı için sisteme yeni ürün eklenemez.";
         public static string CarImageLimitExceeded = "Bir aracın en fazla 5 tane görseli olabilir.";
+        public static string AuthorizationDenied = "Yetkiniz yok.";
+        public static string UserRegistered = "Kayıt olma işlemi başarılı.";
+        public static string PasswordError = "Parola hatası.";
+        public static string SuccessfulLogin ="Kayıt başarılı";
+        public static string UserAlreadyExists = "Kullanıcı kayıtlı.";
     }
 }

@@ -9,6 +9,7 @@ using System.Linq;
 using Core.Aspects.Autofac.Validation;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation.FluentValidation;
+using Core.Entities.Concrete;
 
 namespace Business.Concrete
 {
@@ -71,6 +72,18 @@ namespace Business.Concrete
             {
                 return new ErrorResult();
             }
+        }
+
+
+
+        public List<OperationClaim> GetClaims(User user)
+        {
+            return _userDal.GetClaims(user);
+        }
+
+        public User GetByMail(string email)
+        {
+            return _userDal.Get(u => u.Email == email);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Business.Constants;
+using Core.Entities.Concrete;
 using Entities.Concrete;
 using FluentValidation;
 using System;
@@ -17,8 +18,8 @@ namespace Business.ValidationRules.FluentValidation
             RuleFor(u => u.LastName).NotEmpty().WithMessage(Messages.NotEmpty);
             RuleFor(u => u.Email).NotEmpty().WithMessage(Messages.NotEmpty);
             RuleFor(u => u.Email).NotEmpty().WithMessage(Messages.NotEmpty);
-            RuleFor(u => u.Password).NotEmpty().WithMessage(Messages.NotEmpty);
-            RuleFor(u => u.Password).Must(IsPasswordValid).WithMessage("Parolanız en az 8 karakter, en az bir harf ve bir sayı içermelidir.");
+            //RuleFor(u => u.Password).NotEmpty().WithMessage(Messages.NotEmpty);
+            //RuleFor(u => u.Password).Must(IsPasswordValid).WithMessage("Parolanız en az 8 karakter, en az bir harf ve bir sayı içermelidir.");
             RuleFor(u => u.Email).EmailAddress().WithMessage("Geçerli bir e-posta adresi giriniz.").When(u => !string.IsNullOrEmpty(u.Email));
         }
 
