@@ -2,6 +2,8 @@
 using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Performance;
 using Core.Aspects.Autofac.Validation;
 using Core.Aspects.Autofac.Validation.FluentValidation;
 using Core.CrossCuttingConcerns.Validation;
@@ -28,8 +30,9 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
-        [SecuredOperation("product.add")]
+        [SecuredOperation("car.add")]
         [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Add(Car car)
         {
             var result = BusinessRules.Run(
@@ -47,6 +50,7 @@ namespace Business.Concrete
         }
 
         [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Update(Car car)
         {
             var result = _carDal.GetAll(c => c.Id == car.Id).SingleOrDefault();
@@ -75,6 +79,7 @@ namespace Business.Concrete
             }
         }
 
+        [CacheAspect]
         public IDataResult<List<Car>> GetAll()
         {
             if (DateTime.Now.Hour == 0)
@@ -84,6 +89,8 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.Success);
         }
 
+        [CacheAspect]
+        [PerformanceAspect(5)]
         public IDataResult<Car> GetById(int id)
         {
             var result = _carDal.GetAll(c => c.Id == id).SingleOrDefault();

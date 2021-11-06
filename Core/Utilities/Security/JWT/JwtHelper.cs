@@ -27,8 +27,8 @@ namespace Core.Utilities.Security.JWT
         public AccessToken CreateToken(User user, List<OperationClaim> operationClaims)
         {
             _accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration);
-            var securityKey = SecurityKeyHelper.CreateSecurityKey(_tokenOptions.SecurityKey);
-            var signingCredentials = SigningCredentialsHelper.CreateSigningCredentials(securityKey);
+            var securityKey = SecurityKeyHelper.CreateSecurityKey(_tokenOptions.SecurityKey); //mysupersecret
+            var signingCredentials = SigningCredentialsHelper.CreateSigningCredentials(securityKey);//anahtarı kullanarak bir signingCredentials oluştur.
             var jwt = CreateJwtSecurityToken(_tokenOptions, user, signingCredentials, operationClaims);
             var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
             var token = jwtSecurityTokenHandler.WriteToken(jwt);
@@ -42,7 +42,7 @@ namespace Core.Utilities.Security.JWT
         }
 
         public JwtSecurityToken CreateJwtSecurityToken(TokenOptions tokenOptions, User user, 
-            SigningCredentials signingCredentials, List<OperationClaim> operationClaims)
+            SigningCredentials SigningCredentials, List<OperationClaim> operationClaims)
         {
             var jwt = new JwtSecurityToken(
                 issuer:tokenOptions.Issuer,
@@ -50,7 +50,7 @@ namespace Core.Utilities.Security.JWT
                 expires:_accessTokenExpiration,
                 notBefore:DateTime.Now,
                 claims: SetClaims(user,operationClaims),
-                signingCredentials:signingCredentials
+                signingCredentials:SigningCredentials
             );
             return jwt;
         }

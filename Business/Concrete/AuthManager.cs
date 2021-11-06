@@ -52,7 +52,7 @@ namespace Business.Concrete
                 return new ErrorDataResult<User>(Messages.PasswordError);
             }
 
-            return new SuccessDataResult<User>(userToCheck, Messages.Success);
+            return new SuccessDataResult<User>(userToCheck, Messages.SuccessfulLogin);
         }
 
         public IResult UserExists(string email)
@@ -67,6 +67,7 @@ namespace Business.Concrete
         public IDataResult<AccessToken> CreateAccessToken(User user)
         {
             var claims = _userService.GetClaims(user);
+
             var accessToken = _tokenHelper.CreateToken(user, claims);
             return new SuccessDataResult<AccessToken>(accessToken, Messages.Success);
         }
