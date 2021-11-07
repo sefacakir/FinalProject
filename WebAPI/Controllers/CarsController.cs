@@ -68,8 +68,8 @@ namespace WebAPI.Controllers
             var result = _carService.Get(car);
             if (result.Success)
             {
-                _carService.Delete(car);
-                return Ok(result);
+                var temp =_carService.Delete(car);
+                return Ok(temp);
             }
             else
             {
@@ -83,8 +83,8 @@ namespace WebAPI.Controllers
             var result = _carService.Get(car);
             if (result.Success)
             {
-                _carService.Update(car);
-                return Ok(result);
+                var temp = _carService.Update(car);
+                return Ok(temp);
             }
             else
             {
@@ -133,6 +133,5 @@ namespace WebAPI.Controllers
                 return BadRequest(result);
             }
         }
-
     }
 }

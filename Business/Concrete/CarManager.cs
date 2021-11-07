@@ -30,6 +30,7 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
+
         [SecuredOperation("car.add")]
         [ValidationAspect(typeof(CarValidator))]
         [CacheRemoveAspect("ICarService.Get")]
@@ -40,20 +41,22 @@ namespace Business.Concrete
                 CheckIfCarDescriptionExists(car.Description),
                 CheckIfCategoryLimitExceded()
             );
-            if (result != null)
+            if (!result.Success)
             {
-                return result;
+                return new ErrorResult(result.Message);
             }
 
             _carDal.Add(car);
             return new SuccessResult(Messages.SuccessAdd);
         }
 
+
+        [SecuredOperation("admin")]
         [ValidationAspect(typeof(CarValidator))]
         [CacheRemoveAspect("ICarService.Get")]
         public IResult Update(Car car)
         {
-            var result = _carDal.GetAll(c => c.Id == car.Id).SingleOrDefault();
+            var result = _carDal.Get(c => c.Id == car.Id);
             if (result != null)
             {
                 _carDal.Update(car);
@@ -65,9 +68,11 @@ namespace Business.Concrete
             }
         }
 
+
+        [SecuredOperation("admin")]
         public IResult Delete(Car car)
         {
-            var result = _carDal.GetAll(c => c.Id == car.Id).SingleOrDefault();
+            var result = _carDal.Get(c => c.Id == car.Id);
             if (result != null)
             {
                 _carDal.Delete(car);
@@ -80,6 +85,7 @@ namespace Business.Concrete
         }
 
         [CacheAspect]
+        [PerformanceAspect(1)]
         public IDataResult<List<Car>> GetAll()
         {
             if (DateTime.Now.Hour == 0)
@@ -89,11 +95,12 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.Success);
         }
 
+
         [CacheAspect]
         [PerformanceAspect(5)]
         public IDataResult<Car> GetById(int id)
         {
-            var result = _carDal.GetAll(c => c.Id == id).SingleOrDefault();
+            var result = _carDal.Get(c => c.Id == id);
             if (result != null)
             {
                 return new SuccessDataResult<Car>(result, Messages.Success);
@@ -105,16 +112,27 @@ namespace Business.Concrete
 
         }
 
+
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
             var result = _carDal.GetCarDetail();
             return new SuccessDataResult<List<CarDetailDto>>(result);
         }
 
+
         public IDataResult<List<Car>> GetCarsByBrandId(int id)
         {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.BrandId == id).ToList());
+            var result = _carDal.GetAll(c => c.BrandId == id).ToList();
+            if (result.Count != 0)
+            {
+                return new SuccessDataResult<List<Car>>(result);
+            }
+            else
+            {
+                return new ErrorDataResult<List<Car>>(Messages.NotFound);
+            }
         }
+
 
         public IDataResult<List<Car>> GetCarsByColorId(int id)
         {
@@ -129,6 +147,7 @@ namespace Business.Concrete
             }
         }
 
+
         public IDataResult<Car> Get(Car car)
         {
             var result = _carDal.GetAll(c => c.Id == car.Id).SingleOrDefault();
@@ -141,6 +160,8 @@ namespace Business.Concrete
                 return new ErrorDataResult<Car>("Kayıt bulunamadı.");
             }
         }
+
+
 
         private IResult CheckIfCarCountOfBrandCorrect(int brandId)
         {
