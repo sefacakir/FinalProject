@@ -86,13 +86,14 @@ namespace Business.Concrete
 
         [CacheAspect]
         [PerformanceAspect(1)]
-        public IDataResult<List<Car>> GetAll()
+        public IDataResult<List<CarDetailDto>> GetAll()
         {
             if (DateTime.Now.Hour == 0)
             {
-                return new ErrorDataResult<List<Car>>(Messages.MaintenanceTime);
+                return new ErrorDataResult<List<CarDetailDto>>(Messages.MaintenanceTime);
             }
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.Success);
+            var result = _carDal.GetCarDetail();
+            return new SuccessDataResult<List<CarDetailDto>>(result, Messages.Success);
         }
 
 
@@ -120,17 +121,17 @@ namespace Business.Concrete
         }
 
 
-        public IDataResult<List<Car>> GetCarsByBrandId(int id)
+        public IDataResult<List<CarDetailDto>> GetCarsByBrandId(int id)
         {
-            var result = _carDal.GetAll(c => c.BrandId == id).ToList();
-            if (result.Count != 0)
+            var temp = _brandService.GetById(id);
+            if (temp == null)
             {
-                return new SuccessDataResult<List<Car>>(result);
+                return new ErrorDataResult<List<CarDetailDto>>(Messages.NotFound);
             }
-            else
-            {
-                return new ErrorDataResult<List<Car>>(Messages.NotFound);
-            }
+            var temp2 = _brandService.GetById(id);
+            var result = _carDal.GetCarDetail(c=> c.BrandName == temp2.Data.Name).ToList();
+            
+            return new SuccessDataResult<List<CarDetailDto>>(result);
         }
 
 

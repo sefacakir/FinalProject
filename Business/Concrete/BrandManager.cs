@@ -23,7 +23,7 @@ namespace Business.Concrete
 
         public IDataResult<Brand> GetById(int id)
         {
-            var result = _brandDal.GetAll(c => c.Id == id).FirstOrDefault();
+            var result = _brandDal.Get(c => c.Id == id);
             if (result != null)
             {
                 return new SuccessDataResult<Brand>(result, Messages.Success);
