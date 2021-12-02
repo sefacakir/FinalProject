@@ -16,6 +16,8 @@ This project is a car rental project.
   - Fluent Validation
   - Entity Framework
   - OOP
+  - Authorization
+  - JWT 
 <br>
 
 ## Show your support
